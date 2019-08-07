@@ -339,13 +339,20 @@ const getLoadButton = () => {
    <button class="load-more" type="button">load more</button>`;
 };
 
-const renderComponent = (container, component, repeat = false, placement = `beforeend`) => {
+const renderComponent = (container, component, repeat = 0) => {
+  let fragmentElement = document.createDocumentFragment();
+  let divElement = document.createElement(`div`);
+
   if (repeat) {
     for (let i = 0; i < repeat; i++) {
-      container.insertAdjacentHTML(placement, component);
+      divElement.innerHTML = component;
+      fragmentElement.appendChild(divElement.firstElementChild);
+      container.appendChild(fragmentElement);
     }
   } else {
-    container.insertAdjacentHTML(placement, component);
+    divElement.innerHTML = component;
+    fragmentElement.appendChild(divElement.firstElementChild);
+    container.appendChild(fragmentElement);
   }
 };
 
