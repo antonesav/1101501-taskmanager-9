@@ -339,31 +339,30 @@ const getLoadButton = () => {
    <button class="load-more" type="button">load more</button>`;
 };
 
+const fragmentElement = document.createDocumentFragment();
+const divElement = document.createElement(`div`);
 const renderComponent = (container, component, repeat = 0) => {
-  let fragmentElement = document.createDocumentFragment();
-  let divElement = document.createElement(`div`);
 
   if (repeat) {
     for (let i = 0; i < repeat; i++) {
       divElement.innerHTML = component;
-      fragmentElement.appendChild(divElement.firstElementChild);
-      container.appendChild(fragmentElement);
+      container.appendChild(divElement.firstElementChild);
     }
   } else {
     divElement.innerHTML = component;
-    fragmentElement.appendChild(divElement.firstElementChild);
-    container.appendChild(fragmentElement);
+    container.appendChild(divElement.firstElementChild);
   }
 };
 
 renderComponent(mainControlElement, getMenuTemplate());
-renderComponent(mainElement, getSearchTemplate());
-renderComponent(mainElement, getFiltersTemplate());
-renderComponent(mainElement, getBoardTemplate());
+renderComponent(fragmentElement, getSearchTemplate());
+renderComponent(fragmentElement, getFiltersTemplate());
+renderComponent(fragmentElement, getBoardTemplate());
 
-const boardContainer = mainElement.querySelector(`.board`);
-const tasksContainer = mainElement.querySelector(`.board__tasks`);
+const boardContainer = fragmentElement.querySelector(`.board`);
+const tasksContainer = fragmentElement.querySelector(`.board__tasks`);
 
 renderComponent(tasksContainer, getTaskFormTemplate());
 renderComponent(tasksContainer, getCardTaskTemplate(), 3);
 renderComponent(boardContainer, getLoadButton());
+mainElement.appendChild(fragmentElement);
