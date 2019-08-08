@@ -338,7 +338,7 @@ const getLoadButton = () => {
   return ` 
    <button class="load-more" type="button">load more</button>`;
 };
-
+// test Travis
 const fragmentElement = document.createDocumentFragment();
 const divElement = document.createElement(`div`);
 const renderComponent = (container, component, repeat = 0) => {
