@@ -25,15 +25,15 @@ const renderComponent = (container, component, repeat = DEFAULT_COUNT) => {
   }
 };
 
-renderComponent(mainControlElement, getMenuTemplate);
-renderComponent(fragmentElement, getSearchTemplate);
-renderComponent(fragmentElement, getFiltersTemplate);
-renderComponent(fragmentElement, getBoardTemplate);
+renderComponent(mainControlElement, getMenuTemplate());
+renderComponent(fragmentElement, getSearchTemplate());
+renderComponent(fragmentElement, getFiltersTemplate());
+renderComponent(fragmentElement, getBoardTemplate());
 
 const boardContainer = fragmentElement.querySelector(`.board`);
 const tasksContainer = fragmentElement.querySelector(`.board__tasks`);
 
-renderComponent(tasksContainer, getTaskFormTemplate);
-renderComponent(tasksContainer, getCardTaskTemplate, CARD_COUNT);
-renderComponent(boardContainer, getLoadButton);
+renderComponent(tasksContainer, getTaskFormTemplate());
+renderComponent(tasksContainer, getCardTaskTemplate(), CARD_COUNT);
+renderComponent(boardContainer, getLoadButton());
 mainElement.appendChild(fragmentElement);
