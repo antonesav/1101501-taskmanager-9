@@ -1,18 +1,57 @@
-export const getFiltersTemplate = () =>
-  `<section class="main__filter filter container">
-    <input type="radio" id="filter__all" class="filter__input visually-hidden" name="filter" checked="">
-    <label for="filter__all" class="filter__label">
-      All <span class="filter__all-count">1</span></label>
-    <input type="radio" id="filter__overdue" class="filter__input visually-hidden" name="filter" disabled="">
-    <label for="filter__overdue" class="filter__label">Overdue <span class="filter__overdue-count">0</span></label>
-    <input type="radio" id="filter__today" class="filter__input visually-hidden" name="filter" disabled="">
-    <label for="filter__today" class="filter__label">Today <span class="filter__today-count">0</span></label>
-    <input type="radio" id="filter__favorites" class="filter__input visually-hidden" name="filter" disabled="">
-    <label for="filter__favorites" class="filter__label">Favorites <span class="filter__favorites-count">0</span></label>
-    <input type="radio" id="filter__repeating" class="filter__input visually-hidden" name="filter" disabled="">
-    <label for="filter__repeating" class="filter__label">Repeating <span class="filter__repeating-count">0</span></label>
-    <input type="radio" id="filter__tags" class="filter__input visually-hidden" name="filter" disabled="">
-    <label for="filter__tags" class="filter__label">Tags <span class="filter__tags-count">0</span></label>
-    <input type="radio" id="filter__archive" class="filter__input visually-hidden" name="filter">
-    <label for="filter__archive" class="filter__label">Archive <span class="filter__archive-count">115</span></label>
-   </section>`;
+const filters = [
+  {title: `all`, count: 0, isChecked: true, isDisabled: false},
+  {title: `overdue`, count: 0, isChecked: false, isDisabled: true},
+  {title: `today`, count: 0, isChecked: false, isDisabled: true},
+  {title: `favorites`, count: 0, isChecked: false, isDisabled: false},
+  {title: `repeating`, count: 0, isChecked: false, isDisabled: false},
+  {title: `tags`, count: 0, isChecked: false, isDisabled: false},
+  {title: `archive`, count: 0, isChecked: false, isDisabled: false},
+];
+
+const countTags = new Set();
+
+// Имеется ли хоть 1 повторяющийся день
+const isRepeating = (days) => {
+  return Object.keys(days).some((day) => {
+    return days[day];
+  });
+};
+
+const renderFilter = (filter) => {
+  const {title, count, isChecked, isDisabled} = filter;
+  return `
+    <input
+      type="radio"
+      id="filter__${title}"
+      class="filter__input visually-hidden"
+      name="filter"
+      ${isChecked ? `checked` : ``}
+      ${isDisabled ? `disabled` : ``}
+    />
+    <label for="filter__${title}" class="filter__label">
+        ${title} <span class="filter__${title}-count">${count}</span>
+    </label>`;
+};
+
+const renderFilters = (markup) => markup.map((filter) => renderFilter(filter));
+
+const fillFilters = (tasks) => {
+
+  for (const task of tasks) {
+    countTags.add(...task.tags);
+  }
+
+  filters[0].count = tasks.length;
+  filters[3].count = tasks.filter((task)=> task.isFavorite).length;
+  filters[6].count = tasks.filter((task)=> task.isArchive).length;
+  filters[4].count = tasks.filter((task)=> isRepeating(task.repeatingDays)).length;
+  filters[5].count = countTags.size;
+};
+
+export const getFiltersTemplate = (tasks) => {
+  fillFilters(tasks);
+  return `
+  <section class="main__filter filter container">
+    ${renderFilters(filters).join(``)}
+  </section>`;
+};

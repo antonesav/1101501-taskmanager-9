@@ -3,39 +3,53 @@ import {getSearchTemplate} from "./components/search";
 import {getFiltersTemplate} from "./components/filters";
 import {getBoardTemplate} from "./components/board";
 import {getCardTaskTemplate} from "./components/card";
-import {getTaskFormTemplate} from "./components/task-form";
 import {getLoadButton} from "./components/load-button";
+import {mockTasks} from "./data";
 
-import {getTask} from "./data";
-
-const CARD_COUNT = 3;
 const mainElement = document.querySelector(`.main`);
 const mainControlElement = document.querySelector(`.main__control`);
 
-const fragmentElement = document.createDocumentFragment();
-const renderComponent = (container, component, data, repeat) => {
-  const divElement = document.createElement(`div`);
-  if (repeat) {
-    for (let i = 0; i < repeat; i++) {
-      divElement.innerHTML = new Array(repeat).fill(``).map(data).map(component).join(``);
-      container.appendChild(divElement.firstElementChild);
-    }
-  } else {
-    divElement.innerHTML = component;
-    container.appendChild(divElement.firstElementChild);
-  }
+const renderTasks = (arrayTasks) => {
+  let tasksShow = 0;
+  const tasks = arrayTasks;
+
+  return {
+    render: (container, count) => {
+
+      if (count >= tasks.length) {
+        count = tasks.length;
+        document.querySelector(`.load-more`).remove();
+      }
+
+      let arraySlice = tasks.splice(0, count);
+
+      arraySlice.map((item) => container.insertAdjacentHTML(`beforeend`, getCardTaskTemplate(item)));
+      tasksShow += count;
+    },
+
+    getVisible: () => tasksShow,
+
+    getLength: () => tasks.length,
+
+    getAll: () => tasks
+  };
 };
 
-renderComponent(mainControlElement, getMenuTemplate());
-renderComponent(fragmentElement, getSearchTemplate());
-renderComponent(fragmentElement, getFiltersTemplate());
-renderComponent(fragmentElement, getBoardTemplate());
+const tasks = renderTasks(mockTasks());
 
-const boardContainer = fragmentElement.querySelector(`.board`);
-const tasksContainer = fragmentElement.querySelector(`.board__tasks`);
+const onLoadClick = () => {
+  tasks.render(tasksContainer, 2);
+};
 
-renderComponent(tasksContainer, getTaskFormTemplate());
-renderComponent(tasksContainer, getCardTaskTemplate, getTask, CARD_COUNT);
+mainControlElement.insertAdjacentHTML(`beforeend`, getMenuTemplate());
+mainElement.insertAdjacentHTML(`beforeend`, getSearchTemplate());
+mainElement.insertAdjacentHTML(`beforeend`, getFiltersTemplate(tasks.getAll()));
+mainElement.insertAdjacentHTML(`beforeend`, getBoardTemplate());
 
-renderComponent(boardContainer, getLoadButton());
-mainElement.appendChild(fragmentElement);
+const boardContainer = document.querySelector(`.board`);
+const tasksContainer = document.querySelector(`.board__tasks`);
+
+tasks.render(tasksContainer, 7);
+
+boardContainer.insertAdjacentHTML(`beforeend`, getLoadButton());
+document.querySelector(`.load-more`).addEventListener(`click`, onLoadClick);
