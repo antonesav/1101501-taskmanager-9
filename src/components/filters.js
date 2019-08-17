@@ -33,7 +33,37 @@ const renderFilter = (filter) => {
     </label>`;
 };
 
-const renderFilters = (markup) => markup.map((filter) => renderFilter(filter));
+const getFilters = (markup) => markup.map((filter) => renderFilter(filter));
+
+const filterCount = {
+  'all': function (it) {
+    return it.length;
+  },
+
+  'overdue': function (it) {
+    return it.count;
+  },
+
+  'today': function (it) {
+    return it.count;
+  },
+
+  'favorites': function (it) {
+    return it.filter((task)=> task.isFavorite).length;
+  },
+
+  'repeating': function (it) {
+    return it.filter((task)=> isRepeating(task.repeatingDays)).length;
+  },
+
+  'tags': function () {
+    return countTags.size;
+  },
+
+  'archive': function (it) {
+    return it.filter((task)=> task.isArchive).length;
+  }
+};
 
 const fillFilters = (tasks) => {
 
@@ -41,17 +71,15 @@ const fillFilters = (tasks) => {
     countTags.add(...task.tags);
   }
 
-  filters[0].count = tasks.length;
-  filters[3].count = tasks.filter((task)=> task.isFavorite).length;
-  filters[6].count = tasks.filter((task)=> task.isArchive).length;
-  filters[4].count = tasks.filter((task)=> isRepeating(task.repeatingDays)).length;
-  filters[5].count = countTags.size;
+  filters.forEach((item) => {
+    item.count = filterCount[item.title](tasks);
+  });
 };
 
 export const getFiltersTemplate = (tasks) => {
   fillFilters(tasks);
   return `
   <section class="main__filter filter container">
-    ${renderFilters(filters).join(``)}
+    ${getFilters(filters).join(``)}
   </section>`;
 };

@@ -1,5 +1,5 @@
 export const getCardTaskTemplate = ({description, dueDate, tags, repeatingDays, color, isFavorite, isArchive}) =>
-  `<article class="card card--${color} ${Object.keys(repeatingDays).some((day) => repeatingDays[day]) ? `card--repeat` : ``}">
+  `<article class="card card--${color} ${Object.keys(repeatingDays).some((day) => day) ? `card--repeat` : ``}">
     <div class="card__form">
       <div class="card__inner">
         <div class="card__control">
@@ -35,7 +35,7 @@ export const getCardTaskTemplate = ({description, dueDate, tags, repeatingDays, 
             </div>
             <div class="card__hashtag">
               <div class="card__hashtag-list">
-                 ${Array.from(tags).map((tag) => `<span class="card__hashtag-inner">
+                 ${[...tags].map((tag) => `<span class="card__hashtag-inner">
                 <span class="card__hashtag-name">
                   #${tag}
                 </span>

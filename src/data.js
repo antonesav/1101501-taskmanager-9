@@ -4,6 +4,8 @@ import {getRandomValue} from "./util";
 import {createRepeatDays} from "./util";
 import {getTags} from "./util";
 
+const TASKS_COUNT = 20;
+
 const dataMock = {
   description: [`Изучить теорию`, `Сделать домашку`, `Пройти интенсив на соточку`],
   tags: [`homework`, `theory`, `practice`, `intensive`, `keks`],
@@ -22,8 +24,6 @@ export const getTask = () => {
     isArchive: getRandomBoolean()
   };
 };
-
-const TASKS_COUNT = 20;
 
 export const mockTasks = () => {
   const tasks = [];

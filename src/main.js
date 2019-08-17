@@ -6,6 +6,8 @@ import {getCardTaskTemplate} from "./components/card";
 import {getLoadButton} from "./components/load-button";
 import {mockTasks} from "./data";
 
+const TASKS_COUNT_ON_CLICK = 2;
+
 const mainElement = document.querySelector(`.main`);
 const mainControlElement = document.querySelector(`.main__control`);
 
@@ -38,7 +40,7 @@ const renderTasks = (arrayTasks) => {
 const tasks = renderTasks(mockTasks());
 
 const onLoadClick = () => {
-  tasks.render(tasksContainer, 2);
+  tasks.render(tasksContainer, TASKS_COUNT_ON_CLICK);
 };
 
 mainControlElement.insertAdjacentHTML(`beforeend`, getMenuTemplate());
