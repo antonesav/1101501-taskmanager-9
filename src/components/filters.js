@@ -8,33 +8,6 @@ const filters = [
   {title: `archive`, count: 0, isChecked: false, isDisabled: false},
 ];
 
-const countTags = new Set();
-
-// Имеется ли хоть 1 повторяющийся день
-const isRepeating = (days) => {
-  return Object.keys(days).some((day) => {
-    return days[day];
-  });
-};
-
-const renderFilter = (filter) => {
-  const {title, count, isChecked, isDisabled} = filter;
-  return `
-    <input
-      type="radio"
-      id="filter__${title}"
-      class="filter__input visually-hidden"
-      name="filter"
-      ${isChecked ? `checked` : ``}
-      ${isDisabled ? `disabled` : ``}
-    />
-    <label for="filter__${title}" class="filter__label">
-        ${title} <span class="filter__${title}-count">${count}</span>
-    </label>`;
-};
-
-const getFilters = (markup) => markup.map((filter) => renderFilter(filter));
-
 const filterCount = {
   'all': function (it) {
     return it.length;
@@ -64,6 +37,33 @@ const filterCount = {
     return it.filter((task)=> task.isArchive).length;
   }
 };
+
+const countTags = new Set();
+
+// Имеется ли хоть 1 повторяющийся день
+const isRepeating = (days) => {
+  return Object.keys(days).some((day) => {
+    return days[day];
+  });
+};
+
+const renderFilter = (filter) => {
+  const {title, count, isChecked, isDisabled} = filter;
+  return `
+    <input
+      type="radio"
+      id="filter__${title}"
+      class="filter__input visually-hidden"
+      name="filter"
+      ${isChecked ? `checked` : ``}
+      ${isDisabled ? `disabled` : ``}
+    />
+    <label for="filter__${title}" class="filter__label">
+        ${title} <span class="filter__${title}-count">${count}</span>
+    </label>`;
+};
+
+const getFilters = (markup) => markup.map((filter) => renderFilter(filter));
 
 const fillFilters = (tasks) => {
 
