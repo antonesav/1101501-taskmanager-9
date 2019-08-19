@@ -8,34 +8,49 @@ const filters = [
   {title: `archive`, count: 0, isChecked: false, isDisabled: false},
 ];
 
+// const filterCount = {
+//   'all': function (it) {
+//     return it.length;
+//   },
+//
+//   'overdue': function (it) {
+//     return it.count;
+//   },
+//
+//   'today': function (it) {
+//     return it.count;
+//   },
+//
+//   'favorites': function (it) {
+//     return it.filter((task)=> task.isFavorite).length;
+//   },
+//
+//   'repeating': function (it) {
+//     return it.filter((task)=> isRepeating(task.repeatingDays)).length;
+//   },
+//
+//   'tags': function () {
+//     return countTags.size;
+//   },
+//
+//   'archive': function (it) {
+//     return it.filter((task)=> task.isArchive).length;
+//   }
+// };
 const filterCount = {
-  'all': function (it) {
-    return it.length;
-  },
+  all: 0,
 
-  'overdue': function (it) {
-    return it.count;
-  },
+  overdue: 0,
 
-  'today': function (it) {
-    return it.count;
-  },
+  today: 0,
 
-  'favorites': function (it) {
-    return it.filter((task)=> task.isFavorite).length;
-  },
+  favorites: 0,
 
-  'repeating': function (it) {
-    return it.filter((task)=> isRepeating(task.repeatingDays)).length;
-  },
+  repeating: 0,
 
-  'tags': function () {
-    return countTags.size;
-  },
+  tags: 0,
 
-  'archive': function (it) {
-    return it.filter((task)=> task.isArchive).length;
-  }
+  archive: 0,
 };
 
 const countTags = new Set();
@@ -71,8 +86,16 @@ const fillFilters = (tasks) => {
     countTags.add(...task.tags);
   }
 
-  filters.forEach((item) => {
-    item.count = filterCount[item.title](tasks);
+  tasks.map((item) => {
+    filterCount.all += item ? 1 : 0;
+    filterCount.favorites += item.isFavorite ? 1 : 0;
+    filterCount.repeating += isRepeating(item.repeatingDays) ? 1 : 0;
+    filterCount.tags = countTags.size;
+    filterCount.archive += item.isArchive ? 1 : 0;
+  });
+
+  Object.keys(filterCount).forEach((item, index) => {
+    filters[index].count = filterCount[item];
   });
 };
 

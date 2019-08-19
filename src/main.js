@@ -6,7 +6,7 @@ import {getCardTaskTemplate} from "./components/card";
 import {getLoadButton} from "./components/load-button";
 import {mockTasks} from "./data";
 
-const TASKS_COUNT_ON_CLICK = 2;
+const TASKS_COUNT_ON_CLICK = 8;
 
 const mainElement = document.querySelector(`.main`);
 const mainControlElement = document.querySelector(`.main__control`);
