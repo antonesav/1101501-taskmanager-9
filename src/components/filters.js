@@ -86,7 +86,7 @@ const fillFilters = (tasks) => {
     countTags.add(...task.tags);
   }
 
-  tasks.map((item) => {
+  tasks.forEach((item) => {
     filterCount.all += item ? 1 : 0;
     filterCount.favorites += item.isFavorite ? 1 : 0;
     filterCount.repeating += isRepeating(item.repeatingDays) ? 1 : 0;
